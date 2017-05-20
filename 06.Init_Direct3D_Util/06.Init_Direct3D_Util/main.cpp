@@ -1,10 +1,36 @@
 #include "d3dUtility.h"
 
+// D3DFVF_XYZRHW = has x,y,z,rhw
+// D3DFVF_DIFFUSE = has color
+#define D3DFVF_VERTEX (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
+
 IDirect3DDevice9* Device = 0;
+// video memory pointer
+LPDIRECT3DVERTEXBUFFER9 g_VertexBuffer = NULL;
+
+struct stD3DVertex
+{
+	float x, y, z, rhw;
+	unsigned long color;
+};
 
 bool Setup()
 {
 	// pre init something
+	unsigned long col = D3DCOLOR_XRGB(255, 255, 255);
+
+	// in main memory
+	stD3DVertex objDate[] = 
+	{
+		{ 420.0f,150.0f,0.5f,1.0f,col },
+		{ 420.0f,350.0f,0.5f,1.0f,col },
+		{ 220.0f,150.0f,0.5f,1.0f,col },
+		{ 220.0f,350.0f,0.5f,1.0f,col }
+	};
+
+	// to video memory
+	Device->CreateVertexBuffer(sizeof(objDate), 0, D3DFVF_VERTEX, &g_VertexBuffer,NULL);
+
 	return true;
 }
 
